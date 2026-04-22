@@ -1,6 +1,6 @@
 #include <complex>
 #include <iostream>
-#include <chrono>
+#include <omp.h>
 
 using namespace std;
 
@@ -10,33 +10,36 @@ int main(){
 	cin >> max_column;
 	cin >> max_n;
 
-	auto start = std::chrono::high_resolution_clock::now();
-	auto end = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double> elapsed = end - start;
-	std::cout << "pow time: " << elapsed.count() << "\n";
-
 	char **mat = (char**)malloc(sizeof(char*)*max_row);
+
 	for (int i=0; i<max_row;i++)
 		mat[i]=(char*)malloc(sizeof(char)*max_column);
 
+
+	double start  = omp_get_wtime();
+
+	#pragma omp parallel for num_threads(8) schedule(dynamic)
 	for(int r = 0; r < max_row; ++r){
 		for(int c = 0; c < max_column; ++c){
 			complex<float> z;
 			int n = 0;
 			while(abs(z) < 2 && ++n < max_n)
-				z = (z*z) + decltype(z)(
+				z = pow(z, 2) + decltype(z)(
 					(float)c * 2 / max_column - 1.5,
 					(float)r * 2 / max_row - 1
 				);
 			mat[r][c]=(n == max_n ? '#' : '.');
 		}
+		cout << omp_get_num_threads() << "\n";
 	}
 
+	double end  = omp_get_wtime();
+	cout << end - start << "\n";
+/*
 	for(int r = 0; r < max_row; ++r){
 		for(int c = 0; c < max_column; ++c)
 			std::cout << mat[r][c];
 		cout << '\n';
 	}	
+*/
 }
-
-
