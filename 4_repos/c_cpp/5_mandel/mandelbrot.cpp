@@ -1,5 +1,6 @@
 #include <complex>
 #include <iostream>
+#include <chrono>
 
 using namespace std;
 
@@ -9,8 +10,12 @@ int main(){
 	cin >> max_column;
 	cin >> max_n;
 
-	char **mat = (char**)malloc(sizeof(char*)*max_row);
+	auto start = std::chrono::high_resolution_clock::now();
+	auto end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "pow time: " << elapsed.count() << "\n";
 
+	char **mat = (char**)malloc(sizeof(char*)*max_row);
 	for (int i=0; i<max_row;i++)
 		mat[i]=(char*)malloc(sizeof(char)*max_column);
 
@@ -19,7 +24,7 @@ int main(){
 			complex<float> z;
 			int n = 0;
 			while(abs(z) < 2 && ++n < max_n)
-				z = pow(z, 2) + decltype(z)(
+				z = (z*z) + decltype(z)(
 					(float)c * 2 / max_column - 1.5,
 					(float)r * 2 / max_row - 1
 				);

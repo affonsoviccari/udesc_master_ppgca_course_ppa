@@ -1,5 +1,5 @@
 
-CXXFLAGS=-O3 -std=c++11 -Wall
+CXXFLAGS=-O3 -std=c++11 -Wall -pg
 RM=rm -f
 EXEC=mandelbrot
 
@@ -9,5 +9,8 @@ $(EXEC):
 	$(CXX) $(CXXFLAGS) $(EXEC).cpp -c -o $(EXEC).o
 	$(CXX) $(CXXFLAGS) $(EXEC).o -o $(EXEC)
 
+profile:
+	gprof $(EXEC) gmon.out > gmon.txt
+
 clean:
-	$(RM) $(EXEC).o $(EXEC)
+	$(RM) $(EXEC).o $(EXEC) gmon.out gmon.txt
