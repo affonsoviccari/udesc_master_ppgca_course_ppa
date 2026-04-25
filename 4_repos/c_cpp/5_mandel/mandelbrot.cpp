@@ -4,7 +4,10 @@
 
 using namespace std;
 
-int main(){
+int main(int argc, char* argv[]){
+	int chunk_size = (argc > 1) ? atoi(argv[1]) : 1;
+	int n_threads = (argc > 2) ? atoi(argv[2]) : 1;
+
 	int max_row, max_column, max_n;
 	cin >> max_row;
 	cin >> max_column;
@@ -18,7 +21,7 @@ int main(){
 
 	double start  = omp_get_wtime();
 
-	#pragma omp parallel for num_threads(8) schedule(dynamic)
+	#pragma omp parallel for num_threads(n_threads) schedule(guided, chunk_size)
 	for(int r = 0; r < max_row; ++r){
 		for(int c = 0; c < max_column; ++c){
 			complex<float> z;
@@ -30,7 +33,7 @@ int main(){
 				);
 			mat[r][c]=(n == max_n ? '#' : '.');
 		}
-		cout << omp_get_num_threads() << "\n";
+		// cout << omp_get_num_threads() << "\n";
 	}
 
 	double end  = omp_get_wtime();
