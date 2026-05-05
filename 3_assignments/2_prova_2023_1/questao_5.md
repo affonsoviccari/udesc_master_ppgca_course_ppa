@@ -49,7 +49,7 @@ A matriz G que é alvo da comparação é sempre compartilhada e estática na me
   - Conforme o aumento dos vértices a complexidado do problema aumenta muito, então se tratando de uma alocação dinâmica, sem o conhecimento do problema, é apropriado utilizar processamento local para grafos com poucos vértices, e utilizar a troca de mensagens em servidor para problemas com mais vértices.
 
 **Mapping:**
-  - A troca de vértices da matriz e a comparação mantém o sistema equilibrado, pois todas as permutações possuem os mesmos dados e as comparações são relativamente as mesmas, então o equilíbrio do sistema e estático, para um dado problema, se resolvido não precisa ser redesenhado, porém para um novo grafo é necessário remapeamento das cargas.
+  - A troca de vértices da matriz e a comparação mantém o sistema equilibrado, pois todas as permutações possuem os mesmos dados e as comparações são relativamente as mesmas, então o equilíbrio do sistema é estático, para um dado problema, se resolvido não precisa ser redesenhado, porém para um novo grafo é necessário remapeamento das cargas. Ainda se observado o isomorfismo, é possível finalizar a execução com early return, finalizando as threads com a thread master.
 
 
 
