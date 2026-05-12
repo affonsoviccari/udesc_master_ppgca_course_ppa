@@ -1,39 +1,45 @@
 #include "knn.h"
 
 char knn(int n_groups, Group * groups, int k, Point to_evaluate) {
-    char * labels = (char *) malloc(sizeof(char) * k);
-    float * distances = (float *) malloc(sizeof(float) * k);
-
-    int i, j, x, y;
-
-    for (i = 0; i < k; i++) {
-        labels[i] = -1;
-        distances[i] = -1;
-    }
+    int i, j;
 
     for (i = 0; i < n_groups; i++) {
         Group g = groups[i];
 
         for (j = 0; j < g.length; j++) {
             float d = euclidean_distance_no_sqrt(to_evaluate, g.points[j]);
-
-            for (x = 0; x < k; x++) {
-                if (d < distances[x] || distances[x] == -1) {
-                    for (y = k - 1; y > x; y--) {
-                        distances[y] = distances[y - 1];
-                        labels[y] = labels[y - 1];
-                    }
-
-                    distances[x] = d;
-                    labels[x] = g.label;
-
-                    break;
-                }
-            }
+            g.distances[j] = d;
         }
     }
 
-    qsort(labels, k, sizeof(char), compare_for_sort);
+    int total_lenght = 0;
+    for (i = 0; i < n_groups; i++){
+        total_lenght += groups[i].length;
+    }
+
+    GroupDistLabel* all_groups_dist_label = malloc(sizeof(GroupDistLabel) * total_lenght);
+    int x = 0;
+
+    for (i = 0; i < n_groups; i++) {
+        Group g = groups[i];
+        for (j = 0; j < g.length; j++) {
+            all_groups_dist_label[x].distance = g.distances[j];
+            all_groups_dist_label[x].label = g.label;
+            x++;
+        }
+    }
+
+    for(i = 0; i < total_lenght; i++) {
+        printf("%d ", all_groups_dist_label[i].distance);
+    }
+
+    quicksort_gdl(all_groups_dist_label, 0, (total_lenght - 1));
+
+    char labels[k];
+    for (i = 0; i < k; i++) {
+        labels[i] = all_groups_dist_label[i].label;
+    }
+    
 
     char most_frequent = labels[0];
     int most_frequent_count = 1;
@@ -74,5 +80,5 @@ int main() {
 
     Point to_evaluate = parse_point();
 
-    printf("%c", knn(n_groups, groups, k, to_evaluate));
+    printf("%c\n", knn(n_groups, groups, k, to_evaluate));
 }

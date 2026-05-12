@@ -10,7 +10,13 @@ typedef struct {
     char label;
     int length;
     Point * points;
+    float * distances;
 } Group;
+
+typedef struct {
+    float distance;
+    char label;
+} GroupDistLabel;
 
 void on_error() {
     printf("Invalid input file.\n");
@@ -46,9 +52,11 @@ Group parse_next_group() {
     group.label = label;
     group.length = length;
     group.points = (Point *) malloc(sizeof(Point) * length);
+    group.distances = (float *) malloc(sizeof(float) * length);
 
     for (int i = 0; i < length; i++) {
         group.points[i] = parse_point();
+        group.distances[i] = -1;
     }
 
     return group;
