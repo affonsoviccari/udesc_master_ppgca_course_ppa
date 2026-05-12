@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <omp.h>
-#include <knn.h>
+#include "knn.h"
 
 void swap(int* a, int* b){
   int t = *a;
@@ -31,7 +31,7 @@ int particioning(int array[], int low, int high){
 }
 
 int particioning_gdl(GroupDistLabel array[], int low, int high){
-  int pivot = array[high].distance;
+  float pivot = array[high].distance;
   int i = (low - 1);
 
   for (int j = low; j <= high - 1; j++){
@@ -75,35 +75,4 @@ void quicksort_gdl(GroupDistLabel array[], int low, int high) {
       quicksort_gdl(array, pivot + 1, high);
     }
   }
-}
-
-int main(int argc, char** argv) {
-  int nt = atoi(argv[1]);
-  int n = atoi(argv[2]);
-  int* array = (int*) malloc(sizeof(int) * n);
-
-  srand(time(NULL));
-
-  for(int i = 0; i < n; i++)
-    array[i] = rand() % n + 1;
-
-  double start_time = omp_get_wtime();
-
-  #pragma omp parallel num_threads(nt)
-  {
-    #pragma omp single
-    {
-      quicksort(array, 0, n - 1);
-    }
-  }
-  
-  double end_time = omp_get_wtime();
-
-  printf("%lf\n", end_time - start_time);
-
-  // for (int i = 0; i < n; i++)
-  //   printf("%d ", array[i]);
-  // printf("\n");
-
-  return 0;
 }
