@@ -1,0 +1,6 @@
+[submodule "3_assignments/5_projeto_final/host"]
+	path = 3_assignments/5_projeto_final/host
+	url = https://github.com/affonsoviccari/udesc_master_ppgca_course_ppa_final_proj_host.git
+[submodule "3_assignments/5_projeto_final/client"]
+	path = 3_assignments/5_projeto_final/client
+	url = https://github.com/affonsoviccari/udesc_master_ppgca_course_ppa_final_proj_client.git
